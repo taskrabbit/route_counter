@@ -13,7 +13,9 @@ module RouteCounter
 
     def write_path!
       path = RouteCounter::Util.normalize_path(env['PATH_INFO'])
-      puts "RouteCounter: #{path}"
+      # TODO: case on config for types: file, redis, other
+    rescue Exception => e
+      RouteCounter.config.error!("[RouteCleaner] #{e.message}\n#{e.backtrace.join("\n")}")
     end
   end
 end
