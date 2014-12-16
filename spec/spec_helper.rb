@@ -15,8 +15,8 @@ end
 RSpec.configure do |config|
   config.mock_framework = :rspec
   
-  config.after(:each) do
+  config.before(:each) do
     RouteCounter.send(:reset)
+    RouteCounter.config.directory = File.expand_path("tmp/recorder")
   end
-
 end

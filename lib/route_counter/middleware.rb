@@ -14,6 +14,8 @@ module RouteCounter
     def write_path!
       path = RouteCounter::Util.normalize_path(env['PATH_INFO'])
       # TODO: case on config for types: file, redis, other
+      # TODO: maybe send if POST, GET, ETC (other info?)
+      RouteCounter::FileRecorder.path_visited(path)
     rescue Exception => e
       RouteCounter.config.error!("[RouteCleaner] #{e.message}\n#{e.backtrace.join("\n")}")
     end

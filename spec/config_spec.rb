@@ -7,7 +7,12 @@ describe RouteCounter::Config do
 
   describe ".directory" do
     it "should default to ~/" do
-      RouteCounter.config.directory.to_s.should == Dir.home
+      RouteCounter.send(:reset)
+      RouteCounter.config.directory.to_s.should == File.join(Dir.home, "route_counter")
+    end
+
+    it "should be defaulting to tmp directory in test" do
+      RouteCounter.config.directory.should =~ /\/tmp\/recorder/
     end
 
     it "should be able to be set" do

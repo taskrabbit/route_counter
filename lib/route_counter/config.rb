@@ -3,7 +3,7 @@ module RouteCounter
     attr_writer :directory, :enabled
 
     def directory
-      @directory ||= Dir.home
+      @directory ||= File.join(Dir.home, "route_counter")
     end
 
     def enabled
