@@ -32,7 +32,8 @@ describe RouteCounter::FileRecorder do
   describe "#path_visited" do
     it "should write to file" do
       url = "/test/me"
-      check_path = File.join(RouteCounter::FileRecorder.parent_directory, "current", "test", "me")
+      current_path = File.join(RouteCounter::FileRecorder.parent_directory, "current")
+      check_path = File.join(current_path, "test", "me")
 
       File.exists?(check_path).should == false
 
@@ -51,6 +52,13 @@ describe RouteCounter::FileRecorder do
       RouteCounter::FileRecorder.path_visited("/")
       paths = RouteCounter::FileRecorder.paths_visited
       paths.should == { url => 2, "/" => 1 }
+
+      File.exist?(current_path).should == true
+
+      paths = RouteCounter::FileRecorder.rotate!
+      paths.should == { url => 2, "/" => 1 }
+
+      File.exist?(current_path).should == false
     end
   end
 end

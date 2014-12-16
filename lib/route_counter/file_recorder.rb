@@ -27,20 +27,7 @@ module RouteCounter
         File.join(parent_directory, 'current')
       end
 
-      def path_visited(url_path)
-        # write down it was visited
-        file_path = File.join(File.join(current_directory, safe_path(url_path)))
-        dir_path  = File.dirname(file_path)
-        FileUtils.mkdir_p(dir_path)
-
-        logdev = LogDevice.new(file_path)
-        logdev.write('X')
-        logdev.close
-      end
-
-      def paths_visited
-        # returns what was visited and counts
-        root = current_directory
+      def read_directory(root)
         out = {}
         Dir[ File.join(root, '**', '*') ].each do |file|
           next if File.directory?(file)
@@ -51,6 +38,27 @@ module RouteCounter
           out[url_path] = hits
         end
         out
+      end
+
+      def path_visited(url_path)
+        # write down it was visited
+        file_path = File.join(File.join(current_directory, safe_path(url_path)))
+        logdev = LogDevice.new(file_path)
+        logdev.write('X')
+        logdev.close
+      end
+
+      def paths_visited(root=nil)
+        # returns what was visited and counts
+        read_directory(current_directory)
+      end
+
+      def rotate!
+        # lock the current one and return the visited
+        alt_directory = File.join(parent_directory, "#{Time.now.to_i}-#{rand(99999999)}")
+        FileUtils.mkdir_p(current_directory) # make sure it's there
+        FileUtils.mv(current_directory, alt_directory)
+        read_directory(alt_directory)
       end
     end
 
@@ -103,6 +111,8 @@ module RouteCounter
 
       def create_logfile(filename)
         begin
+          FileUtils.mkdir_p(File.dirname(filename))
+
           logdev = open(filename, (File::WRONLY | File::APPEND | File::CREAT | File::EXCL))
           logdev.flock(File::LOCK_EX)
           logdev.sync = true
