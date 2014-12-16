@@ -16,4 +16,18 @@ describe RouteCounter::Config do
     end
   end
 
+  describe ".enabled" do
+    it "should defualt to false" do
+      RouteCounter.config.enabled.should == false
+      RouteCounter.config.enabled?.should == false
+    end
+
+    it "should be able to be set" do
+      RouteCounter.config.enabled = true
+
+      RouteCounter.config.enabled.should == true
+      RouteCounter.config.enabled?.should == true
+    end
+  end
+
 end
