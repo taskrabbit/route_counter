@@ -24,6 +24,7 @@ describe RouteCounter::FileRecorder do
       RouteCounter::FileRecorder.unsafe_path("hello/there.json").should == "/hello/there.json"
       RouteCounter::FileRecorder.unsafe_path("hello.html").should == "/hello.html"
       RouteCounter::FileRecorder.unsafe_path("_______root").should == "/"
+      RouteCounter::FileRecorder.unsafe_path("/_______root").should == "/"
       RouteCounter::FileRecorder.unsafe_path("").should == "/"
     end
   end
@@ -38,11 +39,18 @@ describe RouteCounter::FileRecorder do
       RouteCounter::FileRecorder.path_visited(url)
 
       File.exists?(check_path).should == true
-      File.read(check_path).should == 'G'
+      File.read(check_path).should == 'X'
 
       RouteCounter::FileRecorder.path_visited(url)
 
-      File.read(check_path).should == 'GG'
+      File.read(check_path).should == 'XX'
+
+      paths = RouteCounter::FileRecorder.paths_visited
+      paths.should == { url => 2 }
+
+      RouteCounter::FileRecorder.path_visited("/")
+      paths = RouteCounter::FileRecorder.paths_visited
+      paths.should == { url => 2, "/" => 1 }
     end
   end
 end

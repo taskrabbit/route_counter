@@ -7,15 +7,15 @@ module RouteCounter
 
     class << self
       def safe_path(path)
-        path.slice!(0) if path[0] == '/' # remove leading
+        path = path[1..-1] if path[0] == '/' # remove leading
         path = ROOT_IDENTIFIER if path == '' # handle root
 
         path
       end
 
       def unsafe_path(path)
-        path = "" if path == ROOT_IDENTIFIER
-        path = "/#{path}" unless path[0] == '/'
+        path = "/#{path}" unless path[0] == '/'     # add leading
+        path = "/" if path == "/#{ROOT_IDENTIFIER}" # handle root
         path
       end
 
@@ -27,14 +27,30 @@ module RouteCounter
         File.join(parent_directory, 'current')
       end
 
-      def path_visited(path)
-        file_path = File.join(File.join(current_directory, safe_path(path)))
+      def path_visited(url_path)
+        # write down it was visited
+        file_path = File.join(File.join(current_directory, safe_path(url_path)))
         dir_path  = File.dirname(file_path)
         FileUtils.mkdir_p(dir_path)
 
         logdev = LogDevice.new(file_path)
-        logdev.write('G')
+        logdev.write('X')
         logdev.close
+      end
+
+      def paths_visited
+        # returns what was visited and counts
+        root = current_directory
+        out = {}
+        Dir[ File.join(root, '**', '*') ].each do |file|
+          next if File.directory?(file)
+          # each should be 1 byte
+          hits = File.size(file)
+          file_path = file.gsub(root, '')
+          url_path = unsafe_path(file_path)
+          out[url_path] = hits
+        end
+        out
       end
     end
 
