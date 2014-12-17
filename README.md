@@ -18,20 +18,21 @@ Or install it yourself as:
 
     $ gem install route_counter
 
-## Usage
-
-Enable the recording in an initializer and insert the middleware.
+Enable the recording in an initializer and insert the middleware:
 
 ```ruby
   RouteCounter.config.enabled = true
   Rails.application.config.middleware.use RouteCounter::Middleware
 ```
 
-Add to Rakefile
+Add to Rakefile:
 
-```
+```ruby
 require "route_counter/tasks"
 ```
+
+## Usage
+
 
 Check what's been used.
 
@@ -39,13 +40,13 @@ Check what's been used.
   $ bundle exec rake routes:count:local
 ```
 
-All of this gets stored on your disk. If you want to clear it out.
+TODO: All of this gets stored on your disk. If you want to clear it out.
 
 ```bash
   $ bundle exec rake route_counter:local:clear
 ```
 
-## Global Usage
+## TODO: Global Usage
 
 You might want to see the counts across your servers.
 
@@ -72,4 +73,3 @@ Then on one of the servers you can run to use the global numbers
 
 * could make a middleware (or config option) that wrote directly to Redis
 * should it record more info about the request?
-* do mapping in the recorder
