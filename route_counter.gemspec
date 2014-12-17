@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["brian@bleonard.com"]
   spec.summary       = %q{Monitors the usage of your routes}
   spec.description   = %q{Helps you to find unused Rails routes}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/taskrabbit/route_counter"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
