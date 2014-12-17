@@ -9,8 +9,6 @@ require 'monitor'
 
 module RouteCounter
   class FileRecorder
-    ROOT_IDENTIFIER = "_______root"
-
     class << self
 
       def parent_directory

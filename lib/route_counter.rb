@@ -5,6 +5,7 @@ module RouteCounter
   autoload :ConsoleFormatter, 'route_counter/console_formatter'
   autoload :FileRecorder,     'route_counter/file_recorder'
   autoload :Middleware,       'route_counter/middleware'
+  autoload :RedisRecorder,    'route_counter/redis_recorder'
   autoload :Util,             'route_counter/util'
 
   class << self
