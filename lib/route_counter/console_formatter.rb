@@ -46,23 +46,38 @@ module RouteCounter
 
     private
       def draw_section(routes)
-        name_width, verb_width, path_width = widths(routes)
+        count_width, name_width, verb_width, path_width = widths(routes)
 
         routes.map do |r|
-          "#{r[:name].rjust(name_width)} #{r[:verb].ljust(verb_width)} #{r[:path].ljust(path_width)} #{r[:reqs]}"
+          "#{count_for_route(r).ljust(count_width)} #{r[:name].ljust(name_width)} #{r[:verb].ljust(verb_width)} #{r[:path].ljust(path_width)} #{r[:reqs]}"
         end
       end
 
       def draw_header(routes)
-        name_width, verb_width, path_width = widths(routes)
+        count_width, name_width, verb_width, path_width = widths(routes)
 
-        "#{"Prefix".rjust(name_width)} #{"Verb".ljust(verb_width)} #{"URI Pattern".ljust(path_width)} Controller#Action"
+        "#{"Count".rjust(count_width)} #{"Prefix".ljust(name_width)} #{"Verb".ljust(verb_width)} #{"URI Pattern".ljust(path_width)} Controller#Action"
       end
 
       def widths(routes)
-        [routes.map { |r| r[:name].length }.max,
+        [ max_count_width,
+         routes.map { |r| r[:name].length }.max,
          routes.map { |r| r[:verb].length }.max,
          routes.map { |r| r[:path].length }.max]
+      end
+
+      def max_count_width
+        @max_count_width ||= [@path_hash.values.max.to_s.length, "Count".length].max
+      end
+
+      def count_for_route(r)
+        regex = Regexp.new(r[:regexp])
+        count = 0
+        @path_hash.each do |url, num|
+          next unless url =~ regex
+          count += num
+        end
+        count.to_s
       end
   end
 end

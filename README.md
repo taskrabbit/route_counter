@@ -72,3 +72,4 @@ Then on one of the servers you can run to use the global numbers
 
 * could make a middleware (or config option) that wrote directly to Redis
 * should it record more info about the request?
+* do mapping in the recorder
