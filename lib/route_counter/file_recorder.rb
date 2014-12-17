@@ -42,7 +42,7 @@ module RouteCounter
         logdev.close
       end
 
-      def paths_visited
+      def actions_visited
         # returns what was visited and counts
         read_directory(current_directory)
       end

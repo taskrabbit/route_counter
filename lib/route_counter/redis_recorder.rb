@@ -27,12 +27,16 @@ module RouteCounter
         out
       end
 
-      def action_visited(controller_name, action_name)
-        key = "#{controller_name}##{action_name}"
-        client.hincrby(current_key, key, 1)
+      def increment!(action_key, amount)
+        client.hincrby(current_key, action_key, amount)
       end
 
-      def paths_visited
+      def action_visited(controller_name, action_name)
+        key = "#{controller_name}##{action_name}"
+        increment!(key, 1)
+      end
+
+      def actions_visited
         # returns what was visited and counts
         read_key(current_key)
       end

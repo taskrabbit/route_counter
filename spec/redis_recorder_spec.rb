@@ -24,11 +24,11 @@ describe RouteCounter::RedisRecorder do
 
       @redis.hget(key, action_key).to_i.should == 2
 
-      paths = RouteCounter::RedisRecorder.paths_visited
+      paths = RouteCounter::RedisRecorder.actions_visited
       paths.should == { "comments#create" => 2 }
 
       RouteCounter::RedisRecorder.action_visited("engine/comments", "create")
-      paths = RouteCounter::RedisRecorder.paths_visited
+      paths = RouteCounter::RedisRecorder.actions_visited
       paths.should == { "comments#create" => 2, "engine/comments#create" => 1 }
 
       @redis.exists(key).should == true

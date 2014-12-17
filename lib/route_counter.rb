@@ -6,6 +6,7 @@ module RouteCounter
   autoload :FileRecorder,     'route_counter/file_recorder'
   autoload :Middleware,       'route_counter/middleware'
   autoload :RedisRecorder,    'route_counter/redis_recorder'
+  autoload :Snapshot,         'route_counter/snapshot'
   autoload :Util,             'route_counter/util'
 
   class << self
