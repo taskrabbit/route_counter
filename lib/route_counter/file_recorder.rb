@@ -2,27 +2,15 @@ require 'fileutils'
 require 'monitor'
 
 # A recorder implements these class methods
-#   * path_visited(url_path) : record that it was visited
-#   * paths_visited          : returns hash of url => count
-#   * rotate!                : backup what was recorded and start counting again. returns hash.  
+#   * action_visited(controller_name, action_name) : record that it was visited
+#   * actions_visited : returns hash of url => count
+#   * rotate! : backup what was recorded and start counting again. returns hash.  
 
 module RouteCounter
   class FileRecorder
     ROOT_IDENTIFIER = "_______root"
 
     class << self
-      def safe_path(path)
-        path = path[1..-1] if path[0] == '/' # remove leading
-        path = ROOT_IDENTIFIER if path == '' # handle root
-
-        path
-      end
-
-      def unsafe_path(path)
-        path = "/#{path}" unless path[0] == '/'     # add leading
-        path = "/" if path == "/#{ROOT_IDENTIFIER}" # handle root
-        path
-      end
 
       def parent_directory
         RouteCounter.config.directory
@@ -36,18 +24,20 @@ module RouteCounter
         out = {}
         Dir[ File.join(root, '**', '*') ].each do |file|
           next if File.directory?(file)
-          # each should be 1 byte
-          hits = File.size(file)
-          file_path = file.gsub(root, '')
-          url_path = unsafe_path(file_path)
-          out[url_path] = hits
+          hits = File.size(file) # each should be 1 byte
+          action_name = File.basename(file)
+          controller_name = File.dirname(file)
+          controller_name.gsub!("#{root}/", '')
+          key = "#{controller_name}##{action_name}"
+          out[key] ||= 0
+          out[key] += hits
         end
         out
       end
 
-      def path_visited(url_path)
+      def action_visited(controller_name, action_name)
         # write down it was visited
-        file_path = File.join(File.join(current_directory, safe_path(url_path)))
+        file_path = File.join(File.join(current_directory, controller_name, action_name))
         logdev = LogDevice.new(file_path)
         logdev.write('X')
         logdev.close

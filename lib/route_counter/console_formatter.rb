@@ -71,10 +71,11 @@ module RouteCounter
       end
 
       def count_for_route(r)
-        regex = Regexp.new(r[:regexp])
+        has_action = r[:reqs].to_s
+        return "~" unless has_action.include?("#")
         count = 0
-        @path_hash.each do |url, num|
-          next unless url =~ regex
+        @path_hash.each do |action, num|
+          next unless has_action.start_with?(action)
           count += num
         end
         count.to_s
