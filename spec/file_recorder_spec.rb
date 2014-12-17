@@ -25,11 +25,11 @@ describe RouteCounter::FileRecorder do
 
       File.read(check_path).should == 'XX'
 
-      paths = RouteCounter::FileRecorder.paths_visited
+      paths = RouteCounter::FileRecorder.actions_visited
       paths.should == { "comments#create" => 2 }
 
       RouteCounter::FileRecorder.action_visited("engine/comments", "create")
-      paths = RouteCounter::FileRecorder.paths_visited
+      paths = RouteCounter::FileRecorder.actions_visited
       paths.should == { "comments#create" => 2, "engine/comments#create" => 1 }
 
       File.exist?(current_path).should == true

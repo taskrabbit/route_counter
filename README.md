@@ -46,21 +46,27 @@ All of this gets stored on your disk. If you want to clear it out.
   $ bundle exec rake route_counter:local:clear
 ```
 
-## TODO: Global Usage
+##  Global Usage
 
 You might want to see the counts across your servers.
+This will use Redis to aggregate info from across all of them.
+First, you'll need to tell it where Redis is:
 
-First, you can clear outt the remote store (Redis).
+```ruby
+RouteCounter.config.redis = Redis.new(connection_hash)
+```
+
+Then, you can clear out the remote store.
 Or not to be cumulative to last time you took a snapshot
 
 ```bash
-  $ bundle exec rake route_counter:remote:clear
+  $ bundle exec rake route_counter:global:clear
 ```
 
 Then take a snapshot. You can do this in parallel on all of your servers (with Capistrano for example).
 
 ```bash
-  $ bundle exec rake route_counter:remote:snapshot
+  $ bundle exec rake route_counter:snapshot
 ```
 
 Then on one of the servers you can run to use the global numbers
@@ -73,3 +79,4 @@ Then on one of the servers you can run to use the global numbers
 
 * could make a middleware (or config option) that wrote directly to Redis
 * should it record more info about the request?
+* configurable error handler

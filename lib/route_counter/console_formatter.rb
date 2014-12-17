@@ -7,7 +7,7 @@ module RouteCounter
         # from railties/routes.rake
         all_routes = Rails.application.routes.routes
         inspector = ActionDispatch::Routing::RoutesInspector.new(all_routes)
-        path_hash = recorder_klass.paths_visited
+        path_hash = recorder_klass.actions_visited
         formatter = RouteCounter::ConsoleFormatter.new(path_hash)
         puts inspector.format(formatter, ENV['CONTROLLER'])
       end
