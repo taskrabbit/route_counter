@@ -3,7 +3,7 @@ require 'fileutils'
 
 describe RouteCounter::FileRecorder do
   before(:each) do
-    FileUtils.rm_rf(RouteCounter::FileRecorder.parent_directory)
+    RouteCounter::FileRecorder.clear!
   end
 
   describe "#action_visited" do

@@ -40,7 +40,7 @@ Check what's been used.
   $ bundle exec rake routes:count:local
 ```
 
-TODO: All of this gets stored on your disk. If you want to clear it out.
+All of this gets stored on your disk. If you want to clear it out.
 
 ```bash
   $ bundle exec rake route_counter:local:clear

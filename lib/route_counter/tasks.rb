@@ -6,3 +6,12 @@ namespace :routes do
     end
   end
 end
+
+namespace :route_counter do
+  namespace :local do
+    desc "clears out the local store"
+    task clear: :environment do
+      RouteCounter::FileRecorder.clear!
+    end
+  end
+end

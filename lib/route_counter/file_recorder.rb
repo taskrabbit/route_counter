@@ -4,7 +4,8 @@ require 'monitor'
 # A recorder implements these class methods
 #   * action_visited(controller_name, action_name) : record that it was visited
 #   * actions_visited : returns hash of url => count
-#   * rotate! : backup what was recorded and start counting again. returns hash.  
+#   * rotate! : backup what was recorded and start counting again. returns hash.
+#   * clear!  : clear everything out
 
 module RouteCounter
   class FileRecorder
@@ -54,6 +55,10 @@ module RouteCounter
         FileUtils.mkdir_p(current_directory) # make sure it's there
         FileUtils.mv(current_directory, alt_directory)
         read_directory(alt_directory)
+      end
+
+      def clear!
+        FileUtils.rm_rf(parent_directory)
       end
     end
 
