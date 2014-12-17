@@ -27,6 +27,12 @@ Enable the recording in an initializer and insert the middleware.
   Rails.application.config.middleware.use RouteCounter::Middleware
 ```
 
+Add to Rakefile
+
+```
+require "route_counter/tasks"
+```
+
 Check what's been used.
 
 ```bash

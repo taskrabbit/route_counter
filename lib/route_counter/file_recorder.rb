@@ -1,6 +1,11 @@
 require 'fileutils'
 require 'monitor'
 
+# A recorder implements these class methods
+#   * path_visited(url_path) : record that it was visited
+#   * paths_visited          : returns hash of url => count
+#   * rotate!                : backup what was recorded and start counting again. returns hash.  
+
 module RouteCounter
   class FileRecorder
     ROOT_IDENTIFIER = "_______root"
@@ -48,7 +53,7 @@ module RouteCounter
         logdev.close
       end
 
-      def paths_visited(root=nil)
+      def paths_visited
         # returns what was visited and counts
         read_directory(current_directory)
       end

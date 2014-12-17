@@ -1,10 +1,11 @@
 require "route_counter/version"
 
 module RouteCounter
-  autoload :Config,          'route_counter/config'
-  autoload :FileRecorder,    'route_counter/file_recorder'
-  autoload :Middleware,      'route_counter/middleware'
-  autoload :Util,            'route_counter/util'
+  autoload :Config,           'route_counter/config'
+  autoload :ConsoleFormatter, 'route_counter/console_formatter'
+  autoload :FileRecorder,     'route_counter/file_recorder'
+  autoload :Middleware,       'route_counter/middleware'
+  autoload :Util,             'route_counter/util'
 
   class << self
     def config
